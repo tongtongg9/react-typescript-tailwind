@@ -43,7 +43,7 @@ const AddressSelector = ({ values, setAddress }: Props) => {
         else return tambons.find((t: Tambon) => t.name_th === values.tambon)?.id
     }, [values])
 
-    // set selected
+    // handle selected
     const onSelectedProvince = (e: ChangeEvent<HTMLSelectElement>) => {
         setSelected({ ...selected, province: parseInt(e.target.value) })
         const province = provinces.find((p: Province) => p.id === parseInt(e.target.value))
@@ -51,7 +51,6 @@ const AddressSelector = ({ values, setAddress }: Props) => {
     }
 
     const onSelectedAmphure = (e: ChangeEvent<HTMLSelectElement>) => {
-        console.log(parseInt(e.target.value))
         setSelected({ ...selected, amphure: parseInt(e.target.value) })
         const amphure = amphures.find((a: Amphure) => a.id === parseInt(e.target.value))
         setAddress({ ...values, amphure: amphure?.name_th })
@@ -66,7 +65,7 @@ const AddressSelector = ({ values, setAddress }: Props) => {
     return (
         <>
             <div className="flex justify-center gap-4">
-                <div className="mb-3 xl:w-96">
+                <div className="w-72">
                     <select
                         className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded-lg transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         aria-label="Default select example"
@@ -85,7 +84,7 @@ const AddressSelector = ({ values, setAddress }: Props) => {
                     </select>
                 </div>
 
-                <div className="mb-3 xl:w-96">
+                <div className="w-72">
                     <select
                         className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded-lg transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         aria-label="Default select example"
@@ -104,7 +103,7 @@ const AddressSelector = ({ values, setAddress }: Props) => {
                     </select>
                 </div>
 
-                <div className="mb-3 xl:w-96">
+                <div className="w-72">
                     <select
                         className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded-lg transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         aria-label="Default select example"

@@ -5,7 +5,7 @@ import AddressSelector from './components/AddressSelector'
 import { Address } from './types'
 
 const App = () => {
-    const [address, setAddress] = useState<Address>({ province: '', amphure: '', tambon: '', zip_code: 0 })
+    const [address, setAddress] = useState<Address>({ province: '', amphure: '', tambon: '', zip_code: 0 || null })
 
     return (
         <div className="bg-gray-50 h-screen">
@@ -16,7 +16,7 @@ const App = () => {
                     <p>Province: {address.province}</p>
                     <p>Amphure: {address.amphure}</p>
                     <p>Tambon: {address.tambon}</p>
-                    <p>Zip Code: {address.zip_code}</p>
+                    <p>Zip Code: {address.zip_code }</p>
                 </div>
                 <AddressSelector values={address} setAddress={setAddress} />
             </div>

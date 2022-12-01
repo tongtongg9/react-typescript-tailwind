@@ -2,7 +2,7 @@ export interface Address {
     province: string | undefined;
     amphure: string | undefined;
     tambon: string | undefined;
-    zip_code: number | undefined;
+    zip_code: number | null | undefined;
 }
 
 export interface Province {
