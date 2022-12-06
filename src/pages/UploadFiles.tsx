@@ -80,7 +80,6 @@ export default function UploadFiles() {
     return (
         <div className="h-full flex flex-col items-center pt-28 gap-8 p-16">
             <h1 className="text-3xl font-bold italic">UploadFiles 📄</h1>
-
             <div className="max-w-3xl flex flex-col gap-2 bg-gray-100 p-4 rounded-xl shadow-lg text-gray-900 font-semibold">
                 <div className="flex flex-col justify-center gap-2">
                     <div className="mb-3 w-96">
