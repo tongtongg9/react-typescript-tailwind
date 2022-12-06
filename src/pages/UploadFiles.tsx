@@ -1,13 +1,19 @@
 import { ChangeEvent, useRef, useState } from 'react'
 import _ from 'lodash'
 import axios from 'axios'
-import { CloudUpload } from 'react-bootstrap-icons'
+import { CloudUpload, Trash3 } from 'react-bootstrap-icons'
 import FileIcon from '../components/elements/FileIcon'
+
+interface Files {
+    name: string
+    type: string
+    size: number
+}
+
 export default function UploadFiles() {
     const [fileUploaded, setFileUploaded] = useState<any[]>([])
-    const [isValid, setIsValid] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState<string[]>([])
-    const uploadRef = useRef(null)
 
     const handleFileEvent = (e: ChangeEvent<HTMLInputElement>) => {
         const chosenFiles = Array.prototype.slice.call(e.target.files)
@@ -37,27 +43,42 @@ export default function UploadFiles() {
 
     const handleUpload = async () => {
         let formData = new FormData()
-        fileUploaded.forEach((f) => {
-            formData.append('files', f)
-        })
-        // uploadFile(formData)
 
-        for (const i of fileUploaded) {
-            console.log(i)
+        for (let i = 0; i < fileUploaded.length; i++) {
+            const file = fileUploaded[i]
+            console.log(file)
+            formData.append('files', file)
         }
+
+        await uploadFile(formData)
     }
 
     const uploadFile = async (file: any) => {
+        setIsLoading(true)
         try {
-            const response = await axios.post('http://localhost:3040/uploads', file)
-            console.log({ response })
+            const response = await axios.post('http://localhost:5003/upload', file)
+            console.log(response)
         } catch (error) {
+            console.log(error)
             throw error
+        } finally {
+            setIsLoading(false)
         }
     }
 
+    const handleRemoveFile = (index: number) => {
+        const uploaded = [...fileUploaded]
+        uploaded.splice(index, 1)
+        setFileUploaded(uploaded)
+    }
+
+    const handleRemoveAll = () => {
+        setFileUploaded([])
+        setErrorMessage([])
+    }
+
     return (
-        <div className="h-full flex flex-col items-center border pt-28 gap-8">
+        <div className="h-full flex flex-col items-center pt-28 gap-8 p-16">
             <h1 className="text-3xl font-bold italic">UploadFiles 📄</h1>
 
             <div className="max-w-3xl flex flex-col gap-2 bg-gray-100 p-4 rounded-xl shadow-lg text-gray-900 font-semibold">
@@ -87,13 +108,21 @@ export default function UploadFiles() {
                             />
                         </label>
                     </div>
-                    <div>
+                    <div className="space-x-2">
                         <button
                             type="button"
                             className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                            onClick={() => handleUpload()}
+                            onClick={handleUpload}
                         >
-                            Upload
+                            {isLoading ? 'Loading ...' : 'Upload'}
+                        </button>
+
+                        <button
+                            type="button"
+                            className="inline-block px-6 py-2.5 border border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded-lg shadow-md hover:text-white hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                            onClick={handleRemoveAll}
+                        >
+                            Clear
                         </button>
                     </div>
                     {!_.isEmpty(errorMessage) && (
@@ -108,10 +137,24 @@ export default function UploadFiles() {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-3 gap-4">
                 {fileUploaded.map((file, index) => (
-                    <div key={index} className="flex flex-col gap-2 border border-red-500">
-                        <FileIcon type={file.type} className="w-20 h-20" />
+                    <div
+                        key={index}
+                        className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 p-4 rou"
+                    >
+                        <FileIcon type={file.type} className="w-10 h-10 text-gray-800" />
+                        <p>{file.name}</p>
+                        <p>{file.type}</p>
+                        <div>
+                            <button
+                                type="button"
+                                className="inline-block rounded-full bg-red-600 text-white leading-normal uppercase shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out w-9 h-9"
+                                onClick={() => handleRemoveFile(index)}
+                            >
+                                <Trash3 aria-hidden="true" className="w-3 mx-auto" />
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>
